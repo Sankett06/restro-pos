@@ -24,6 +24,7 @@ const PORT = process.env.PORT || 3001;
 // CORS configuration
 const allowedOrigins = [
   'http://localhost:5173',
+  'https://restro-pos-1.onrender.com',
   'https://test3.codeblocks.in'
 ];
 
