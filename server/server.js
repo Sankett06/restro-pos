@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 3001;
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'https://test3.codeblocks.in/',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true
 }));
 // Security middleware
