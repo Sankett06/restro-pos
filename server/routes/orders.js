@@ -190,7 +190,7 @@ router.put('/:id/status', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Status is required' });
     }
 
-    const validStatuses = ['pending', 'preparing', 'ready', 'served', 'delivered', 'cancelled'];
+    const validStatuses = ['pending', 'preparing', 'ready', 'served', 'delivered', 'completed', 'cancelled'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }

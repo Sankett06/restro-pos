@@ -78,6 +78,7 @@ export default function Orders() {
       case 'ready': return 'bg-green-100 text-green-800';
       case 'served': return 'bg-emerald-100 text-emerald-800';
       case 'delivered': return 'bg-purple-100 text-purple-800';
+      case 'completed': return 'bg-emerald-200 text-emerald-900';
       case 'cancelled': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -90,6 +91,7 @@ export default function Orders() {
       case 'ready': return CheckCircle;
       case 'served': return CheckCircle;
       case 'delivered': return CheckCircle;
+      case 'completed': return CheckCircle;
       case 'cancelled': return XCircle;
       default: return Clock;
     }
@@ -207,7 +209,7 @@ export default function Orders() {
                   <tr key={order.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{order.orderNumber}</div>
+                        <div className="text-sm font-medium text-gray-900">{order.orderNumber || order.order_number || 'N/A'}</div>
                         <div className="text-sm text-gray-500 capitalize">{order.type}</div>
                       </div>
                     </td>
@@ -250,11 +252,13 @@ export default function Orders() {
                           className={`text-xs px-2 py-1 rounded-full border-0 focus:ring-2 focus:ring-emerald-500 ${getStatusColor(order.status)}`}
                         >
                           <option value="pending">Pending</option>
-                          <option value="preparing">Preparing</option>
-                          <option value="ready">Ready</option>
-                          <option value="served">Served</option>
-                          {order.type === 'delivery' && <option value="delivered">Delivered</option>}
-                          <option value="cancelled">Cancelled</option>
+<option value="preparing">Preparing</option>
+<option value="ready">Ready</option>
+<option value="served">Served</option>
+{order.type !== 'dine-in' && <option value="delivered">Delivered</option>}
+<option value="completed">Completed</option>
+<option value="cancelled">Cancelled</option>
+
                         </select>
                       </div>
                     </td>

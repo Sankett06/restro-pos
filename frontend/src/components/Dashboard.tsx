@@ -20,16 +20,28 @@ export default function Dashboard() {
   const todayStart = startOfDay(today);
   const todayEnd = endOfDay(today);
   
+  // const todayOrders = state.orders.filter(order => {
+  //   const orderDate = parseDateTime(order.createdAt);
+  //   return isValidDate(orderDate) && orderDate >= todayStart && orderDate <= todayEnd && order.status !== 'cancelled';
+  // });
   const todayOrders = state.orders.filter(order => {
-    const orderDate = parseDateTime(order.createdAt);
-    return isValidDate(orderDate) && orderDate >= todayStart && orderDate <= todayEnd && order.status !== 'cancelled';
-  });
+  const orderDate = parseDateTime(order.createdAt);
+  return (
+    isValidDate(orderDate) &&
+    orderDate >= todayStart &&
+    orderDate <= todayEnd &&
+    ['completed', 'served', 'delivered'].includes(order.status) // only count truly completed/successful ones
+  );
+});
+
   
   const todayRevenue = todayOrders.reduce((sum, order) => sum + order.total, 0);
   const averageOrderValue = todayOrders.length > 0 ? todayRevenue / todayOrders.length : 0;
   
   // Calculate active orders (pending, preparing, ready)
-  const activeOrders = state.orders.filter(o => ['pending', 'preparing', 'ready'].includes(o.status));
+  //const activeOrders = state.orders.filter(o => ['pending', 'preparing', 'ready'].includes(o.status));
+  const activeOrders = state.orders.filter(o => ['pending', 'preparing', 'ready', 'completed'].includes(o.status));
+
   
   // Calculate table occupancy
   const occupiedTables = state.tables.filter(t => t.status === 'occupied').length;
@@ -203,7 +215,7 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-100">
+      {/* <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border border-gray-100">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <button
@@ -235,7 +247,7 @@ export default function Dashboard() {
             <p className="text-sm font-medium text-purple-700">Reports</p>
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* Charts and Tables */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -255,7 +267,7 @@ export default function Dashboard() {
             {recentOrders.map((order) => (
               <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">{order.orderNumber}</p>
+                  <p className="font-medium text-gray-900 truncate">{order.orderNumber || order.order_number || 'N/A'}</p>
                   <p className="text-sm text-gray-500 capitalize">{order.type}</p>
                 </div>
                 <div className="flex items-center space-x-2 sm:space-x-3">
@@ -275,6 +287,7 @@ export default function Dashboard() {
                           <option value="ready">Ready</option>
                           <option value="served">Served</option>
                           {order.type === 'delivery' && <option value="delivered">Delivered</option>}
+                          <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
                         </select>
                       ) : (
@@ -284,7 +297,8 @@ export default function Dashboard() {
                             order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
                             order.status === 'ready' ? 'bg-green-100 text-green-800' :
                             order.status === 'served' ? 'bg-emerald-100 text-emerald-800' :
-                            order.status === 'delivered' ? 'bg-purple-100 text-purple-800' :
+                            order.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                            order.status === 'delivered' ? 'bg-purple-100 text-purple-800' :             
                             'bg-red-100 text-red-800'
                           }`}>
                             {order.status}

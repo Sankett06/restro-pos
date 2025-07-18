@@ -14,6 +14,8 @@ export default function PrintableBill({ order, onClose }: PrintableBillProps) {
   const { state } = useApp();
   const { formatAmount } = useCurrency();
 
+  console.log('PrintableBill Order:', order); 
+
   const handlePrint = () => {
     window.print();
   };
@@ -70,7 +72,9 @@ export default function PrintableBill({ order, onClose }: PrintableBillProps) {
             <div className="flex justify-between items-start mb-2">
               <div>
                 <h2 className="text-lg font-bold">BILL</h2>
-                <p className="text-sm">Bill No: {order.orderNumber}</p>
+                <p className="text-sm">Bill No: {order.order_number}</p>
+
+                
               </div>
               <div className="text-right text-sm">
                 <p>Date: {isValidDate(order.createdAt) ? format(parseDateTime(order.createdAt), 'dd/MM/yyyy') : 'Invalid Date'}</p>
@@ -97,7 +101,7 @@ export default function PrintableBill({ order, onClose }: PrintableBillProps) {
                   )}
                 </div>
                 <div>
-                  <p><strong>Served by:</strong> {staff?.name || 'N/A'}</p>
+                  {/* <p><strong>Served by:</strong> {staff?.name || 'N/A'}</p> */}
                   <p><strong>Status:</strong> {order.status.charAt(0).toUpperCase() + order.status.slice(1)}</p>
                 </div>
               </div>
@@ -117,7 +121,10 @@ export default function PrintableBill({ order, onClose }: PrintableBillProps) {
               </thead>
               <tbody>
                 {order.items.map((item, index) => {
-                  const menuItem = state.menuItems.find(mi => mi.id === item.menuItemId);
+                  const menuItem = state.menuItems.find(
+  (mi) => mi.id === item.menuItemId || mi.id === item.menu_item_id
+);
+
                   return (
                     <tr key={item.id} className="border-b border-gray-100">
                       <td className="py-2">

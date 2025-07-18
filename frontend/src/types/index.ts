@@ -106,7 +106,7 @@ export interface Order {
   serviceCharge: number;
   discount: number;
   total: number;
-  status: 'pending' | 'preparing' | 'ready' | 'served' | 'delivered' | 'cancelled';
+  status: 'pending' | 'preparing' | 'ready' | 'served' | 'delivered' | 'completed' | 'cancelled';
   createdAt: Date;
   updatedAt: Date;
   staffId: string;
